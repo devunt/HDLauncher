@@ -27,13 +27,13 @@ namespace HDLauncher
             InitializeComponent();
         }
 
-        private async void SettingsBtn_Click(object sender, RoutedEventArgs e)
+        private void SettingsBtn_Click(object sender, RoutedEventArgs e)
         {
             SettingsWindow settingsWindow = new SettingsWindow();
             settingsWindow.Owner = this;
             settingsWindow.ShowDialog();
 
-            await EnsureFFXIVBinaryExists();
+            CheckFFXIVBinaryExists();
         }
 
         private async void MetroWindow_Initialized(object sender, EventArgs e)
@@ -49,7 +49,7 @@ namespace HDLauncher
         {
             Settings.Load();
 
-            await EnsureFFXIVBinaryExists();
+            CheckFFXIVBinaryExists();
 
             Username.Text = Settings.Username;
 
@@ -90,7 +90,10 @@ namespace HDLauncher
         {
             bool dryRun = Keyboard.IsKeyDown(Key.LeftCtrl);
 
-            await EnsureFFXIVBinaryExists();
+            if (!CheckFFXIVBinaryExists())
+            {
+                return;
+            }
 
             ShowMessage("정보 확인중...");
 
@@ -364,23 +367,18 @@ namespace HDLauncher
             }
         }
 
-        private async Task EnsureFFXIVBinaryExists()
+        private bool CheckFFXIVBinaryExists()
         {
-            while (true)
+            if (File.Exists(Path.Combine(Settings.FFXIVPath, Constants.FFXIV_PROGRAM_PATH)))
             {
-                if (File.Exists(Path.Combine(Settings.FFXIVPath, Constants.FFXIV_PROGRAM_PATH)))
-                {
-                    MainGrid.IsEnabled = true;
-                    HideMessageOrError();
-                    break;
-                }
-
-                MainGrid.IsEnabled = false;
-                ShowError("FF14 설치 경로를 찾을 수 없습니다");
-
-                await Task.Delay(100);
-                SettingsBtn_Click(null, null);
+                MainGrid.IsEnabled = true;
+                HideMessageOrError();
+                return true;
             }
+
+            MainGrid.IsEnabled = false;
+            ShowError("FF14 설치 경로를 찾을 수 없습니다");
+            return false;
         }
 
         private void ShowError(string message)
