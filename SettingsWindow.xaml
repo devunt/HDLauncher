@@ -7,10 +7,9 @@
         xmlns:local="clr-namespace:HDLauncher"
         mc:Ignorable="d"
         Height="350" Width="300"
-        
-        ResizeMode="NoResize"
-        BorderThickness="0"
-        GlowBrush="Black"
+
+        BorderBrush="{DynamicResource AccentColorBrush}"
+        BorderThickness="1"
     
         WindowTransitionsEnabled="False"
         WindowStartupLocation="CenterOwner" Loaded="MetroWindow_Loaded" Closing="MetroWindow_Closing"
