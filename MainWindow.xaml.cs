@@ -95,7 +95,7 @@ namespace HDLauncher
                 return;
             }
 
-            ShowMessage("정보 확인중...");
+            ShowInformation("정보 확인중...");
 
             Settings.Username = Username.Text;
             if (SavePassword.IsChecked == true)
@@ -216,7 +216,7 @@ namespace HDLauncher
                     Match isUsingOTP = Constants.RE_JSON_MOTP_USE.Match(resp);
                     if (isUsingOTP.Success)
                     {
-                        ShowMessage("OTP 확인중...");
+                        ShowInformation("OTP 확인중...");
 
                         values = new Dictionary<string, string>
                         {
@@ -238,7 +238,7 @@ namespace HDLauncher
                         }
                     }
 
-                    ShowMessage("게임 로그인 토큰 취득중...");
+                    ShowInformation("게임 로그인 토큰 취득중...");
 
                     values = new Dictionary<string, string>
                     {
@@ -259,7 +259,7 @@ namespace HDLauncher
                         throw new FFException("토큰 취득중 오류가 발생했습니다");
                     }
 
-                    ShowMessage("게임 시작!");
+                    ShowInformation("게임 시작!");
 
                     string lobbyHost, gmHost;
 
@@ -372,30 +372,37 @@ namespace HDLauncher
             if (File.Exists(Path.Combine(Settings.FFXIVPath, Constants.FFXIV_PROGRAM_PATH)))
             {
                 MainGrid.IsEnabled = true;
-                HideMessageOrError();
+                HideMessage();
                 return true;
             }
 
             MainGrid.IsEnabled = false;
-            ShowError("FF14 설치 경로를 찾을 수 없습니다");
+            ShowError("FF14 설치 경로를 찾을 수 없습니다.", "상단 설정에서 설치 경로를 지정해 주세요.");
             return false;
         }
 
-        private void ShowError(string message)
+        private void ShowError(string message, string description = "")
         {
-            MessageContainer.Background = Brushes.Orange;
+            ShowMessage(Brushes.Orange, message, description);
+        }
+
+        private void ShowInformation(string message, string description = "")
+        {
+            ShowMessage(Brushes.SkyBlue, message, description);
+        }
+
+        private void ShowMessage(Brush backgroundColor, string message, string description)
+        {
+            MessageContainer.Background = backgroundColor;
             MessageTextBox.Text = message;
+            if (!string.IsNullOrEmpty(description))
+            {
+                MessageTextBox.Text += "\r\n" + description;
+            }
             MessageContainer.Visibility = Visibility.Visible;
         }
 
-        private void ShowMessage(string message)
-        {
-            MessageContainer.Background = Brushes.SkyBlue;
-            MessageTextBox.Text = message;
-            MessageContainer.Visibility = Visibility.Visible;
-        }
-
-        private void HideMessageOrError()
+        private void HideMessage()
         {
             MessageContainer.Visibility = Visibility.Hidden;
         }
