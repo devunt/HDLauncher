@@ -4,7 +4,7 @@ namespace HDLauncher
 {
     static class Constants
     {
-        public const decimal VERSION = 0.1m;
+        public const decimal VERSION = 0.2m;
 
         public const string LAUNCHER_BASE_URL = @"https://launcher.ff14.co.kr";
         public const string WEBCLIENT_USER_AGENT = @"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.2; WOW64; Trident/7.0; .NET4.0C; .NET4.0E; .NET CLR 2.0.50727; .NET CLR 3.0.30729; .NET CLR 3.5.30729)";
