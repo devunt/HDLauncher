@@ -1,0 +1,58 @@
+﻿<Controls:MetroWindow x:Class="HDLauncher.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:local="clr-namespace:HDLauncher"
+        mc:Ignorable="d"
+        Height="350" Width="300"
+        
+        ResizeMode="NoResize"
+        BorderThickness="0"
+        GlowBrush="Black"
+    
+        WindowTransitionsEnabled="False"
+        WindowStartupLocation="CenterOwner" Loaded="MetroWindow_Loaded" Closing="MetroWindow_Closing"
+    >
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Label Content="모든 설정은 이 창이 닫힐 때 자동으로 저장됩니다." FontWeight="Bold"/>
+        
+        <StackPanel Grid.Row="1" Margin="10">
+            <Label Content="파이널판타지 14 설치 경로"/>
+            <Grid Margin="0,0,0,20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="InstallPath" Margin="0,0,5,0" />
+                <Button x:Name="InstallPathBtn" Content="..." FontSize="10" Click="InstallPathBtn_Click" Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" Grid.Column="1"/>
+            </Grid>
+        </StackPanel>
+
+        <StackPanel Grid.Row="2">
+            <Label Content="라이센스 (Licenses)" FontWeight="Bold"/>
+            <TextBlock FontSize="10" TextWrapping="Wrap" Margin="10,0">
+                "힐디브랜드의 특제 파판 런쳐"의 개발자는 SQUARE ENIX 및 EYEDENTITY MOBILE과 관련이 없습니다.<LineBreak/>
+                "FFXIV", "Final Fantasy XIV" 및 "파이널판타지 14", "파판 14"는 SQUARE ENIX 및 EYEDENTITY MOBILE의 등록상표입니다.<LineBreak/>
+            </TextBlock>
+        </StackPanel>
+
+        <StackPanel Grid.Row="3">
+            <Label Content="정보" FontWeight="Bold"/>
+            <TextBlock FontSize="10" TextWrapping="Wrap" Margin="10,0">
+                Hildibrand's Custom FFXIV Launcher <Run x:Name="Version"/><LineBreak/>
+                Developed by @devunt (유채색 @ 오딘)<LineBreak/>
+                Designed by @Razulic (무채색 @ 오딘)<LineBreak/>
+                Tested by &lt;&lt;닷치&gt;&gt; members
+            </TextBlock>
+        </StackPanel>
+    </Grid>
+</Controls:MetroWindow>
