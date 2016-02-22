@@ -34,7 +34,7 @@
                 <TextBox x:Name="InstallPath" Margin="0,0,5,0" />
                 <Button x:Name="InstallPathBtn" Content="..." FontSize="10" Click="InstallPathBtn_Click" Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" Grid.Column="1"/>
             </Grid>
-            <CheckBox x:Name="RunAsAdministrator" IsTabStop="False" Content="관리자 권한으로 실행" ToolTip="엑스박스 컨트롤러 진동 알림 등에 필요합니다." HorizontalAlignment="Left"/>
+            <CheckBox x:Name="RunAsAdministrator" IsTabStop="False" Content="관리자 권한으로 실행" ToolTip="관리자 권한이 필요한 몇몇 기능이 오작동할 경우 사용하세요" HorizontalAlignment="Left"/>
         </StackPanel>
 
         <StackPanel Grid.Row="2">
