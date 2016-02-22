@@ -6,7 +6,7 @@
         xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:local="clr-namespace:HDLauncher"
         mc:Ignorable="d"
-        Height="350" Width="300"
+        Height="400" Width="300"
 
         BorderBrush="{DynamicResource AccentColorBrush}"
         BorderThickness="1"
@@ -25,8 +25,8 @@
         <Label Content="모든 설정은 이 창이 닫힐 때 자동으로 저장됩니다." FontWeight="Bold"/>
         
         <StackPanel Grid.Row="1" Margin="10">
-            <Label Content="파이널판타지 14 설치 경로"/>
-            <Grid Margin="0,0,0,20">
+            <Label Content="파이널판타지14 설치 경로"/>
+            <Grid Margin="0,0,0,10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
@@ -34,6 +34,7 @@
                 <TextBox x:Name="InstallPath" Margin="0,0,5,0" />
                 <Button x:Name="InstallPathBtn" Content="..." FontSize="10" Click="InstallPathBtn_Click" Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" Grid.Column="1"/>
             </Grid>
+            <CheckBox x:Name="RunAsAdministrator" IsTabStop="False" Content="관리자 권한으로 실행" ToolTip="엑스박스 컨트롤러 진동 알림 등에 필요합니다." HorizontalAlignment="Left"/>
         </StackPanel>
 
         <StackPanel Grid.Row="2">

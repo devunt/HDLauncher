@@ -19,6 +19,7 @@ namespace HDLauncher
         {
             Version.Text = "v" + Constants.VERSION;
             InstallPath.Text = Settings.FFXIVPath;
+            RunAsAdministrator.IsChecked = Settings.RunAsAdministrator;
         }
 
         private void InstallPathBtn_Click(object sender, RoutedEventArgs e)
@@ -37,6 +38,7 @@ namespace HDLauncher
         private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Settings.FFXIVPath = InstallPath.Text;
+            Settings.RunAsAdministrator = RunAsAdministrator.IsChecked == true;
             Settings.Save();
         }
     }

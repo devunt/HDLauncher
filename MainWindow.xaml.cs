@@ -290,7 +290,12 @@ namespace HDLauncher
                     }
                     else
                     {
-                        Process.Start(new ProcessStartInfo(ffxivPath, commandLine));
+                        ProcessStartInfo startInfo = new ProcessStartInfo(ffxivPath, commandLine);
+                        if (Settings.RunAsAdministrator)
+                        {
+                            startInfo.Verb = "runas";
+                        }
+                        Process.Start(startInfo);
                     }
 
                     Application.Current.Shutdown();
