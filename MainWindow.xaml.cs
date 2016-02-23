@@ -140,7 +140,7 @@ namespace HDLauncher
                 using (var client = new HttpClient() { BaseAddress = new Uri(Constants.LAUNCHER_BASE_URL) })
                 {
                     client.DefaultRequestHeaders
-                        .TryAddWithoutValidation("User-Agent", Constants.WEBCLIENT_USER_AGENT);
+                        .TryAddWithoutValidation("User-Agent", Constants.LAUNCHER_USER_AGENT);
                     client.DefaultRequestHeaders
                         .Referrer = new Uri(Constants.LAUNCHER_BASE_URL);
 
@@ -275,7 +275,7 @@ namespace HDLauncher
                     }
 
                     string token = tokenMatch.Groups[1].Value;
-                    string commandLine = string.Format(Constants.COMMAND_LINE, lobbyHost, Constants.LOBBY_TCP_PORT, gmHost, token, Constants.RESET_CONFIG);
+                    string commandLine = string.Format(Constants.FFXIV_ARGUMENTS, lobbyHost, Constants.LOBBY_TCP_PORT, gmHost, token, Constants.RESET_CONFIG);
 
                     string ffxivPath = Path.Combine(Settings.FFXIVPath, Constants.FFXIV_PROGRAM_PATH);
 
@@ -330,7 +330,7 @@ namespace HDLauncher
                 using (var client = new HttpClient())
                 {
                     client.DefaultRequestHeaders
-                        .TryAddWithoutValidation("User-Agent", Constants.WEBCLIENT_USER_AGENT);
+                        .TryAddWithoutValidation("User-Agent", Constants.LAUNCHER_USER_AGENT);
                     client.DefaultRequestHeaders
                         .Referrer = new Uri(Constants.LAUNCHER_BASE_URL);
 
@@ -345,14 +345,14 @@ namespace HDLauncher
 
                     if (firstRun)
                     {
-                        var fResponse = await client.GetAsync(new Uri(Constants.RECAPTCHA_TOKEN_URL + Constants.RECAPTCHA_KEY));
+                        var fResponse = await client.GetAsync(new Uri(Constants.RECAPTCHA_TOKEN_URL + Constants.RECAPTCHA_SITE_KEY));
                         var fResp = await fResponse.Content.ReadAsStringAsync();
 
                         Match fMatch = Constants.RE_RECAPTCHA_CKEY.Match(fResp);
                         cKey = fMatch.Groups[1].Value;
                     }
 
-                    var response = await client.GetAsync(new Uri(string.Format(Constants.RECAPTCHA_RELOAD_URL, Constants.RECAPTCHA_KEY, cKey)));
+                    var response = await client.GetAsync(new Uri(string.Format(Constants.RECAPTCHA_RELOAD_URL, Constants.RECAPTCHA_SITE_KEY, cKey)));
                     var resp = await response.Content.ReadAsStringAsync();
 
                     Match match = Constants.RE_RECAPTCHA_RELOAD_CKEY.Match(resp);
