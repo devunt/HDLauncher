@@ -4,11 +4,10 @@ using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Threading;
 
 namespace HDLauncher
 {
-    static class AutoUpdater
+    internal static class AutoUpdater
     {
         public static async Task Update()
         {
@@ -16,20 +15,18 @@ namespace HDLauncher
             {
                 File.Delete(Constants.UPDATE_TEMP_FILENAME);
 
-                using (var client = new HttpClient() { BaseAddress = new Uri(Constants.UPDATE_BASE_URL) })
+                using (var client = new HttpClient { BaseAddress = new Uri(Constants.UPDATE_BASE_URL) })
                 {
                     var response = await client.GetAsync(Constants.UPDATE_VERCHECK_URL);
                     var versionResp = await response.Content.ReadAsStringAsync();
                     var version = decimal.Parse(versionResp);
-                    
-                    if (version <= Constants.VERSION)
-                    {
-                        return;
-                    }
 
-                    UpdaterWindow updaterWindow = new UpdaterWindow();
+                    if (version <= Constants.VERSION)
+                        return;
+
+                    var updaterWindow = new UpdaterWindow();
                     updaterWindow.Show();
-                    
+
                     var path = Process.GetCurrentProcess().MainModule.FileName;
 
                     File.Move(path, Constants.UPDATE_TEMP_FILENAME);
@@ -45,13 +42,15 @@ namespace HDLauncher
                         stream.CopyTo(fstream);
                     }
 
-                    updaterWindow.Close();                    
+                    updaterWindow.Close();
 
                     Process.Start(new ProcessStartInfo(path));
                     Application.Current.Shutdown();
                 }
             }
-            catch { }
+            catch
+            {
+            }
         }
     }
 }

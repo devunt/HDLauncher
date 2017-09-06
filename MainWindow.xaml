@@ -1,20 +1,19 @@
 ﻿<Controls:MetroWindow
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
-        xmlns:local="clr-namespace:HDLauncher"
-        xmlns:Properties="clr-namespace:HDLauncher.Properties" x:Class="HDLauncher.MainWindow"
-        mc:Ignorable="d"
-        Height="540" Width="325"
-        ResizeMode="CanMinimize"
-        BorderThickness="0" 
-        GlowBrush="Black"
-        
-        WindowTransitionsEnabled="False"
-        WindowStartupLocation="CenterScreen" Loaded="MetroWindow_Loaded" Initialized="MetroWindow_Initialized"
-    >
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+    xmlns:local="clr-namespace:HDLauncher"
+    xmlns:Properties="clr-namespace:HDLauncher.Properties" x:Class="HDLauncher.MainWindow"
+    mc:Ignorable="d"
+    Height="540" Width="325"
+    ResizeMode="CanMinimize"
+    BorderThickness="0"
+    GlowBrush="Black"
+
+    WindowTransitionsEnabled="False"
+    WindowStartupLocation="CenterScreen" Loaded="MetroWindow_Loaded" Initialized="MetroWindow_Initialized">
 
     <Controls:MetroWindow.RightWindowCommands>
         <Controls:WindowCommands>
@@ -25,43 +24,55 @@
     <Grid>
         <Grid x:Name="MainGrid" Margin="35">
             <StackPanel>
-                <Image x:Name="Logo" Width="150" HorizontalAlignment="Center" VerticalAlignment="Top" Source="Images/logo.png" Margin="0,0,0,20"/>
+                <Image x:Name="Logo" Width="150" HorizontalAlignment="Center" VerticalAlignment="Top"
+                       Source="Images/logo.png" Margin="0,0,0,20" />
 
-                <TextBox x:Name="Username" TabIndex="0" Controls:TextBoxHelper.Watermark="아이디" Margin="0,0,0,5"/>
-                <PasswordBox x:Name="Password" TabIndex="1" Controls:TextBoxHelper.Watermark="비밀번호" Controls:TextBoxHelper.ClearTextButton="True" Margin="0,0,0,5"/>
+                <TextBox x:Name="Username" TabIndex="0" Controls:TextBoxHelper.Watermark="아이디" Margin="0,0,0,5" />
+                <PasswordBox x:Name="Password" TabIndex="1" Controls:TextBoxHelper.Watermark="비밀번호"
+                             Controls:TextBoxHelper.ClearTextButton="True" Margin="0,0,0,5" />
 
-                <TextBox x:Name="OTP" TabIndex="2" Controls:TextBoxHelper.Watermark="OTP (미사용시 생략)" Controls:TextBoxHelper.ClearTextButton="True" Margin="0,0,0,5"/>
+                <TextBox x:Name="OTP" TabIndex="2" Controls:TextBoxHelper.Watermark="OTP (미사용시 생략)"
+                         Controls:TextBoxHelper.ClearTextButton="True" Margin="0,0,0,5" />
 
                 <Border BorderThickness="1" BorderBrush="LightGray" Height="50" Margin="0,0,0,5">
-                    <Image x:Name="ReCaptcha_Image" Stretch="Fill"/>
+                    <Image x:Name="ReCaptcha_Image" Stretch="Fill" />
                 </Border>
 
                 <Grid Margin="0,0,0,5">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <TextBox x:Name="ReCaptcha" TabIndex="3" Controls:TextBoxHelper.Watermark="상단 문자 입력" Controls:TextBoxHelper.ClearTextButton="True" Margin="0,0,5,0" />
-                    <Button x:Name="ReCaptcha_Reload" IsTabStop="False" Content="⟳" FontSize="15" Padding="0" Click="ReCaptcha_Reload_Click" Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" Grid.Column="1"/>
+                    <TextBox x:Name="ReCaptcha" TabIndex="3" Controls:TextBoxHelper.Watermark="상단 문자 입력"
+                             Controls:TextBoxHelper.ClearTextButton="True" Margin="0,0,5,0" />
+                    <Button x:Name="ReCaptcha_Reload" IsTabStop="False" Content="⟳" FontSize="15" Padding="0"
+                            Click="ReCaptcha_Reload_Click"
+                            Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" Grid.Column="1" />
                 </Grid>
             </StackPanel>
 
             <StackPanel VerticalAlignment="Bottom">
                 <Grid VerticalAlignment="Bottom" Margin="0,0,0,5">
-                    <CheckBox x:Name="SavePassword" IsTabStop="False" Content="비밀번호 저장" ToolTip="공용 컴퓨터에서는 사용하지 마세요!" HorizontalAlignment="Left"/>
+                    <CheckBox x:Name="SavePassword" IsTabStop="False" Content="비밀번호 저장" ToolTip="공용 컴퓨터에서는 사용하지 마세요!"
+                              HorizontalAlignment="Left" />
 
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <RadioButton x:Name="DC_Moogle" IsTabStop="False" Content="모그리" ToolTip="오딘, 가루다, 알테마, 라무, 만드라고라" IsChecked="True" Margin="0,0,5,0"/>
-                        <RadioButton x:Name="DC_Chocobo" IsTabStop="False" Content="초코보" ToolTip="사보텐더, 시바, 베히모스, 리바이어선, 길가메시"/>
+                        <RadioButton x:Name="DC_Moogle" IsTabStop="False" Content="모그리"
+                                     ToolTip="오딘, 가루다, 알테마, 라무, 만드라고라" IsChecked="True" Margin="0,0,5,0" />
+                        <RadioButton x:Name="DC_Chocobo" IsTabStop="False" Content="초코보"
+                                     ToolTip="사보텐더, 시바, 베히모스, 리바이어선, 길가메시" />
                     </StackPanel>
                 </Grid>
 
-                <Button x:Name="ProcessBtn" TabIndex="4" Content="게임 시작" VerticalAlignment="Bottom" Height="50" Click="ProcessBtn_Click"/>
+                <Button x:Name="ProcessBtn" TabIndex="4" Content="게임 시작" VerticalAlignment="Bottom" Height="50"
+                        Click="ProcessBtn_Click" />
             </StackPanel>
         </Grid>
-        
-        <Border x:Name="MessageContainer" Visibility="Hidden" BorderBrush="{x:Null}" Background="SkyBlue" VerticalAlignment="Bottom" Height="Auto">
-            <TextBlock x:Name="MessageTextBox" TextAlignment="Center" VerticalAlignment="Center" FontSize="14" FontWeight="Bold" Margin="5"/>
+
+        <Border x:Name="MessageContainer" Visibility="Hidden" BorderBrush="{x:Null}" Background="SkyBlue"
+                VerticalAlignment="Bottom" Height="Auto">
+            <TextBlock x:Name="MessageTextBox" TextAlignment="Center" VerticalAlignment="Center" FontSize="14"
+                       FontWeight="Bold" Margin="5" />
         </Border>
     </Grid>
 </Controls:MetroWindow>

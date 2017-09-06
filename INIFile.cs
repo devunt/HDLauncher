@@ -4,30 +4,32 @@ using System.Text;
 namespace HDLauncher
 {
     /// <summary>
-    /// Create a New INI file to store or load data
+    ///     Create a New INI file to store or load data
     /// </summary>
     public class INIFile
     {
         public string path;
 
-        [DllImport("kernel32")]
-        private static extern long WritePrivateProfileString(string section,
-            string key, string val, string filePath);
-        [DllImport("kernel32")]
-        private static extern int GetPrivateProfileString(string section,
-                 string key, string def, StringBuilder retVal,
-            int size, string filePath);
-
         /// <summary>
-        /// INIFile Constructor.
+        ///     INIFile Constructor.
         /// </summary>
         /// <PARAM name="INIPath"></PARAM>
         public INIFile(string INIPath)
         {
             path = INIPath;
         }
+
+        [DllImport("kernel32")]
+        private static extern long WritePrivateProfileString(string section,
+            string key, string val, string filePath);
+
+        [DllImport("kernel32")]
+        private static extern int GetPrivateProfileString(string section,
+            string key, string def, StringBuilder retVal,
+            int size, string filePath);
+
         /// <summary>
-        /// Write Data to the INI File
+        ///     Write Data to the INI File
         /// </summary>
         /// <PARAM name="Section"></PARAM>
         /// Section name
@@ -37,11 +39,11 @@ namespace HDLauncher
         /// Value Name
         public void WriteValue(string Section, string Key, string Value)
         {
-            WritePrivateProfileString(Section, Key, Value, this.path);
+            WritePrivateProfileString(Section, Key, Value, path);
         }
 
         /// <summary>
-        /// Read Data Value From the Ini File
+        ///     Read Data Value From the Ini File
         /// </summary>
         /// <PARAM name="Section"></PARAM>
         /// <PARAM name="Key"></PARAM>
@@ -49,11 +51,10 @@ namespace HDLauncher
         /// <returns></returns>
         public string ReadValue(string Section, string Key)
         {
-            StringBuilder temp = new StringBuilder(255);
-            int i = GetPrivateProfileString(Section, Key, "", temp,
-                                            255, this.path);
+            var temp = new StringBuilder(255);
+            var i = GetPrivateProfileString(Section, Key, "", temp,
+                255, path);
             return temp.ToString();
-
         }
     }
 }

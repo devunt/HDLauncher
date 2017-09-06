@@ -1,23 +1,28 @@
-﻿using Microsoft.Win32;
-using System;
+﻿using System;
 using System.IO;
+using Microsoft.Win32;
 
 namespace HDLauncher
 {
-    class Settings
+    internal class Settings
     {
+        public enum DataCenters
+        {
+            Moogle,
+            Chocobo
+        }
+
         private static string _password = "";
         private static INIFile iniFile;
-
-        public enum DataCenters { Moogle, Chocobo };
 
         public static string FFXIVPath { get; set; } = "";
         public static string Username { get; set; } = "";
         public static DataCenters DataCenter { get; set; } = DataCenters.Moogle;
-        public static bool SavePassword { get; set; } = false;
-        public static bool RunAsAdministrator { get; set; } = false;
+        public static bool SavePassword { get; set; }
+        public static bool RunAsAdministrator { get; set; }
 
-        public static string Password {
+        public static string Password
+        {
             get
             {
                 if (string.IsNullOrEmpty(_password)) return "";
@@ -32,19 +37,23 @@ namespace HDLauncher
 
         private static void Init()
         {
-            using (RegistryKey key = Registry.LocalMachine.OpenSubKey(Constants.REG_UNINSTALL_KEYPATH1))
-            using (RegistryKey key2 = Registry.LocalMachine.OpenSubKey(Constants.REG_UNINSTALL_KEYPATH2))
+            using (var key = Registry.LocalMachine.OpenSubKey(Constants.REG_UNINSTALL_KEYPATH1))
+            using (var key2 = Registry.LocalMachine.OpenSubKey(Constants.REG_UNINSTALL_KEYPATH2))
             {
                 try
                 {
                     FFXIVPath = (string)key.GetValue(Constants.REG_PATH_VALNAME, "");
                 }
-                catch (NullReferenceException) { }
+                catch (NullReferenceException)
+                {
+                }
                 try
                 {
                     FFXIVPath = (string)key2.GetValue(Constants.REG_PATH_VALNAME, "");
                 }
-                catch (NullReferenceException) { }
+                catch (NullReferenceException)
+                {
+                }
             }
         }
 
@@ -61,7 +70,9 @@ namespace HDLauncher
                 FFXIVPath = iniFile.ReadValue("ffxiv", "path");
                 Username = iniFile.ReadValue("account", "username");
                 _password = iniFile.ReadValue("account", "password");
-                DataCenter = (iniFile.ReadValue("preferences", "datacenter") == "c") ? DataCenters.Chocobo : DataCenters.Moogle;
+                DataCenter = iniFile.ReadValue("preferences", "datacenter") == "c"
+                    ? DataCenters.Chocobo
+                    : DataCenters.Moogle;
                 SavePassword = iniFile.ReadValue("preferences", "savepassword") == "1";
                 RunAsAdministrator = iniFile.ReadValue("preferences", "runasadministrator") == "1";
             }
@@ -72,7 +83,7 @@ namespace HDLauncher
             iniFile.WriteValue("ffxiv", "path", FFXIVPath);
             iniFile.WriteValue("account", "username", Username);
             iniFile.WriteValue("account", "password", _password);
-            iniFile.WriteValue("preferences", "datacenter", (DataCenter == DataCenters.Chocobo) ? "c" : "m");
+            iniFile.WriteValue("preferences", "datacenter", DataCenter == DataCenters.Chocobo ? "c" : "m");
             iniFile.WriteValue("preferences", "savepassword", SavePassword ? "1" : "0");
             iniFile.WriteValue("preferences", "runasadministrator", RunAsAdministrator ? "1" : "0");
         }
