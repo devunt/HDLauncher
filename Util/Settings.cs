@@ -6,10 +6,10 @@ namespace HDLauncher
 {
     internal class Settings
     {
-        public enum DataCenters
+        public enum GraphicApis
         {
-            Moogle,
-            Chocobo
+            DX_9,
+            DX_11
         }
 
         private static string _password = "";
@@ -17,7 +17,7 @@ namespace HDLauncher
 
         public static string FFXIVPath { get; set; } = "";
         public static string Username { get; set; } = "";
-        public static DataCenters DataCenter { get; set; } = DataCenters.Moogle;
+        public static GraphicApis GraphicApi { get; set; } = GraphicApis.DX_11;
         public static bool SavePassword { get; set; }
         public static bool RunAsAdministrator { get; set; }
 
@@ -70,9 +70,7 @@ namespace HDLauncher
                 FFXIVPath = iniFile.ReadValue("ffxiv", "path");
                 Username = iniFile.ReadValue("account", "username");
                 _password = iniFile.ReadValue("account", "password");
-                DataCenter = iniFile.ReadValue("preferences", "datacenter") == "c"
-                    ? DataCenters.Chocobo
-                    : DataCenters.Moogle;
+                GraphicApi = iniFile.ReadValue("preferences", "graphicapi") == "9" ? GraphicApis.DX_9 : GraphicApis.DX_11;
                 SavePassword = iniFile.ReadValue("preferences", "savepassword") == "1";
                 RunAsAdministrator = iniFile.ReadValue("preferences", "runasadministrator") == "1";
             }
@@ -83,7 +81,7 @@ namespace HDLauncher
             iniFile.WriteValue("ffxiv", "path", FFXIVPath);
             iniFile.WriteValue("account", "username", Username);
             iniFile.WriteValue("account", "password", _password);
-            iniFile.WriteValue("preferences", "datacenter", DataCenter == DataCenters.Chocobo ? "c" : "m");
+            iniFile.WriteValue("preferences", "graphicapi", GraphicApi == GraphicApis.DX_9 ? "9" : "11");
             iniFile.WriteValue("preferences", "savepassword", SavePassword ? "1" : "0");
             iniFile.WriteValue("preferences", "runasadministrator", RunAsAdministrator ? "1" : "0");
         }

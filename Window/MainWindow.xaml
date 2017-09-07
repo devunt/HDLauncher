@@ -4,8 +4,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
-    xmlns:local="clr-namespace:HDLauncher"
-    xmlns:Properties="clr-namespace:HDLauncher.Properties" x:Class="HDLauncher.MainWindow"
+    x:Class="HDLauncher.MainWindow"
     mc:Ignorable="d"
     Height="540" Width="325"
     ResizeMode="CanMinimize"
@@ -25,7 +24,7 @@
         <Grid x:Name="MainGrid" Margin="35">
             <StackPanel>
                 <Image x:Name="Logo" Width="150" HorizontalAlignment="Center" VerticalAlignment="Top"
-                       Source="Images/logo.png" Margin="0,0,0,20" />
+                       Source="/Images/logo.png" Margin="0,0,0,20" />
 
                 <TextBox x:Name="Username" TabIndex="0" Controls:TextBoxHelper.Watermark="아이디" Margin="0,0,0,5" />
                 <PasswordBox x:Name="Password" TabIndex="1" Controls:TextBoxHelper.Watermark="비밀번호"
@@ -57,10 +56,10 @@
                               HorizontalAlignment="Left" />
 
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <RadioButton x:Name="DC_Moogle" IsTabStop="False" Content="모그리"
-                                     ToolTip="오딘, 가루다, 알테마, 라무, 만드라고라" IsChecked="True" Margin="0,0,5,0" />
-                        <RadioButton x:Name="DC_Chocobo" IsTabStop="False" Content="초코보"
-                                     ToolTip="사보텐더, 시바, 베히모스, 리바이어선, 길가메시" />
+                        <RadioButton x:Name="DX_9" IsTabStop="False" Content="DX9"
+                                     ToolTip="저사양 컴퓨터에서 더 나은 프레임으로 이용하실 수 있습니다." Margin="0,0,5,0" />
+                        <RadioButton x:Name="DX_11" IsTabStop="False" Content="DX11" IsChecked="True"
+                                     ToolTip="고사양 컴퓨터에서 택하시면 더 좋은 그래픽을 사용하실 수 있습니다." />
                     </StackPanel>
                 </Grid>
 

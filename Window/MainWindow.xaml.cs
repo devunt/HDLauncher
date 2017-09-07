@@ -11,6 +11,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using Newtonsoft.Json;
 
 namespace HDLauncher
 {
@@ -58,7 +59,7 @@ namespace HDLauncher
                 SavePassword.IsChecked = true;
             }
 
-            DC_Chocobo.IsChecked = Settings.DataCenter == Settings.DataCenters.Chocobo;
+            DX_9.IsChecked = Settings.GraphicApi == Settings.GraphicApis.DX_9;
 
             await LoadRecaptcha(true);
 
@@ -101,9 +102,7 @@ namespace HDLauncher
                 Settings.Password = "";
                 Settings.SavePassword = false;
             }
-            Settings.DataCenter = DC_Moogle.IsChecked == true
-                ? Settings.DataCenters.Moogle
-                : Settings.DataCenters.Chocobo;
+            Settings.GraphicApi = DX_9.IsChecked == true ? Settings.GraphicApis.DX_9 : Settings.GraphicApis.DX_11;
             Settings.Save();
 
             MainGrid.IsEnabled = false;
@@ -144,18 +143,13 @@ namespace HDLauncher
                         { "recaptcha_response_field", ReCaptcha.Text.Trim() }
                     };
 
-                    var content = new FormUrlEncodedContent(values);
-                    var response = await client.PostAsync(Constants.LOGIN_URL, content);
-                    var resp = await response.Content.ReadAsStringAsync();
+                    var loginJson = await client.GetJson(Constants.LOGIN_URL, values);
 
-                    var result = Constants.RE_JSON_RESULT.Match(resp);
-                    var code = result.Groups[1].Value;
-
-                    if (code != "0")
+                    if (loginJson.result.ToString() != "0")
                     {
-                        var message = "오류가 발생했습니다";
+                        string message;
                         Control cause = null;
-                        switch (code)
+                        switch (loginJson.result.ToString())
                         {
                             case "-101":
                                 message = "정상 회원이 아닙니다";
@@ -167,28 +161,20 @@ namespace HDLauncher
                                 message = "자동입력방지 값이 잘못되었습니다";
                                 cause = ReCaptcha;
                                 break;
+                            default:
+                                message = "오류가 발생했습니다";
+                                break;
                         }
-                        throw new FFException(message);
+
+                        throw new FFException(message, cause);
                     }
 
-                    result = Constants.RE_JSON_LOGIN_RESULT.Match(resp);
-                    code = result.Groups[1].Value;
-
-                    if (code != "O")
+                    if (loginJson.loginResult.ToString() != "O")
                     {
-                        var message = "오류가 발생했습니다";
+                        string message;
                         Control cause = null;
-                        switch (code)
+                        switch (loginJson.loginResult.ToString())
                         {
-                            case "L"
-                            : // "고객님의 계정은 비밀번호 5회 입력 실패로 인하여 접속이 제한되었습니다.\r\n개인 정보 보호를 위해 본인 인증 완료 후 로그인이 가능합니다."
-                            case "Z"
-                            : // "모험가님의 계정은 개인정보 보호에 취약한 계정으로 확인됩니다.\r\n홈페이지로 이동하셔서 로그인 후\r\n본인 인증 및 비밀번호 변경, U-OTP+ 설정을 통해\r\n모험가님의 소중한 계정을 보호해주시기 바랍니다."
-                            case "Q": // "현재 휴면계정 입니다.\r\n홈페이지를 통해서 휴면계정해지 후 사용 바랍니다.";
-                            case "T": // 아이피 유효성 잠금
-                            case "C": // 게임 미동의
-                                message = "기본 런쳐로 로그인해 문제를 확인하세요";
-                                break;
                             case "E":
                                 message = "아이디가 잘못되었습니다";
                                 cause = Username;
@@ -197,35 +183,38 @@ namespace HDLauncher
                                 message = "비밀번호가 잘못되었습니다";
                                 cause = Password;
                                 break;
+                            case "L": // "고객님의 계정은 비밀번호 5회 입력 실패로 인하여 접속이 제한되었습니다.\r\n개인 정보 보호를 위해 본인 인증 완료 후 로그인이 가능합니다."
+                            case "Z": // "모험가님의 계정은 개인정보 보호에 취약한 계정으로 확인됩니다.\r\n홈페이지로 이동하셔서 로그인 후\r\n본인 인증 및 비밀번호 변경, U-OTP+ 설정을 통해\r\n모험가님의 소중한 계정을 보호해주시기 바랍니다."
+                            case "D": // "중복 접속으로 로그인이 제한됩니다.\r\n로그아웃 후 재 접속하신 경우 잠시 후에 다시 시도해주세요."
+                            case "N": // "현재 블럭 처리 된 상태입니다."
+                            case "Q": // "현재 휴면계정 입니다.\r\n홈페이지를 통해서 휴면계정해지 후 사용 바랍니다."
+                            case "V": // "장기간 접속하지 않아 휴면계정 처리 되었습니다. 홈페이지를 통해서 휴면계정 해제를 진행해주세요."
+                            case "T": // 아이피 유효성 잠금
+                            case "C": // 게임 미동의
+                            default:
+                                message = "기본 런쳐로 로그인해 문제를 확인하세요";
+                                break;
                         }
-                        message = "기본 런쳐로 로그인해 문제를 확인하세요";
+
                         throw new FFException(message, cause);
                     }
 
-                    var motpID = Constants.RE_JSON_MOTP_ID.Match(resp).Groups[1].Value;
-                    var memberKey = Constants.RE_JSON_MEMBER_KEY.Match(resp).Groups[1].Value;
-
-                    var isUsingOTP = Constants.RE_JSON_MOTP_USE.Match(resp);
-                    if (isUsingOTP.Success)
+                    if (loginJson.motpUse == "O")
                     {
                         ShowInformation("OTP 확인중...");
 
                         values = new Dictionary<string, string>
                         {
                             { "csiteNo", Constants.CSITE_NO },
-                            { "motpID", motpID },
+                            { "motpID", loginJson.motpID.ToString() },
                             { "otpNum", OTP.Text.Trim() },
                             { "memberID", Username.Text.Trim() },
-                            { "memberKey", memberKey }
+                            { "memberKey", loginJson.memberKey.ToString() }
                         };
 
-                        content = new FormUrlEncodedContent(values);
-                        response = await client.PostAsync(Constants.OTP_AUTH_URL, content);
-                        var otpResp = await response.Content.ReadAsStringAsync();
-
-                        var otpResult = Constants.RE_JSON_OTP_RESULT.Match(otpResp);
-                        if (otpResult.Success)
-                            throw new FFException("OTP 넘버가 잘못되었습니다", OTP);
+                        var otpJson = await client.GetJson(Constants.OTP_AUTH_URL, values);
+                        if (otpJson.Result != "")
+                            throw new FFException("OTP 번호가 잘못되었습니다", OTP);
                     }
 
                     ShowInformation("게임 로그인 토큰 취득중...");
@@ -236,41 +225,35 @@ namespace HDLauncher
                         { "gameServiceID", Constants.GAME_SERVICE_ID },
                         { "InternetCafeType", Constants.INTERNET_CAFE_TYPE },
                         { "memberID", Username.Text.Trim() },
-                        { "memberKey", memberKey }
+                        { "memberKey", loginJson.memberKey.ToString() }
                     };
 
-                    content = new FormUrlEncodedContent(values);
-                    response = await client.PostAsync(Constants.MAKE_TOKEN_URL, content);
-                    var tokenResp = await response.Content.ReadAsStringAsync();
+                    var tokenJson = await client.GetJson(Constants.MAKE_TOKEN_URL, values);
 
-                    var tokenMatch = Constants.RE_JSON_TOKEN.Match(tokenResp);
-                    if (!tokenMatch.Success)
+                    if (tokenJson.tokenResult != "0")
                         throw new FFException("토큰 취득중 오류가 발생했습니다");
 
                     ShowInformation("게임 시작!");
 
-                    string lobbyHost, gmHost;
+                    string binaryPath;
 
-                    if (DC_Moogle.IsChecked == true)
+                    if (DX_9.IsChecked == true)
                     {
-                        lobbyHost = Constants.MOOGLE_LOBBY_HOST;
-                        gmHost = Constants.MOOGLE_GM_HOST;
+                        binaryPath = Constants.FFXIV_BINARY_PATH_DX_9;
                     }
                     else
                     {
-                        lobbyHost = Constants.CHOCOBO_LOBBY_HOST;
-                        gmHost = Constants.CHOCOBO_GM_HOST;
+                        binaryPath = Constants.FFXIV_BINARY_PATH_DX_11;
                     }
 
-                    var token = tokenMatch.Groups[1].Value;
-                    var commandLine = string.Format(Constants.FFXIV_ARGUMENTS, lobbyHost, Constants.LOBBY_TCP_PORT,
-                        gmHost, token, Constants.RESET_CONFIG);
+                    var commandLine = string.Format(Constants.FFXIV_ARGUMENTS,
+                        Constants.LOBBY_HOST, Constants.LOBBY_TCP_PORT, Constants.GM_HOST, tokenJson.toKen, Constants.RESET_CONFIG);
 
-                    var ffxivPath = Path.Combine(Settings.FFXIVPath, Constants.FFXIV_PROGRAM_PATH);
+                    var ffxivPath = Path.Combine(Settings.FFXIVPath, binaryPath);
 
                     if (dryRun)
                     {
-                        var cl = string.Format("\"{0} {1}\"", ffxivPath, commandLine);
+                        var cl = $"\"{ffxivPath}\" {commandLine}";
                         var res = MessageBox.Show(cl + "\r\n\r\n==========\r\n\r\nPress OK to copy",
                             "Command Line", MessageBoxButton.OKCancel);
                         if (res == MessageBoxResult.OK)
@@ -292,12 +275,10 @@ namespace HDLauncher
                 ReCaptcha_Reload_Click(sender, null);
                 MainGrid.IsEnabled = true;
 
-                if (ex is FFException)
+                if (ex is FFException ffex)
                 {
-                    var ffex = (FFException)ex;
                     ShowError(ex.Message);
-                    if (ffex.Cause != null)
-                        ffex.Cause.Focus();
+                    ffex.Cause?.Focus();
                 }
                 else
                 {
@@ -362,7 +343,7 @@ namespace HDLauncher
 
         private bool CheckFFXIVBinaryExists()
         {
-            if (File.Exists(Path.Combine(Settings.FFXIVPath, Constants.FFXIV_PROGRAM_PATH)))
+            if (File.Exists(Path.Combine(Settings.FFXIVPath, Constants.FFXIV_BINARY_PATH_DX_9)))
             {
                 MainGrid.IsEnabled = true;
                 HideMessage();

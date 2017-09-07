@@ -77,6 +77,9 @@
     <Reference Include="MahApps.Metro, Version=1.5.0.23, Culture=neutral, PublicKeyToken=f4fb5a3c4d1e5b4f, processorArchitecture=MSIL">
       <HintPath>packages\MahApps.Metro.1.5.0\lib\net45\MahApps.Metro.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -102,7 +105,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="MainWindow.xaml">
+    <Page Include="Window\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -110,29 +113,30 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="AutoUpdater.cs" />
+    <Compile Include="Util\AutoUpdater.cs" />
     <Compile Include="Constants.cs" />
-    <Compile Include="Cryptography.cs" />
-    <Compile Include="FFException.cs" />
-    <Compile Include="INIFile.cs" />
+    <Compile Include="Util\Cryptography.cs" />
+    <Compile Include="Util\FFException.cs" />
+    <Compile Include="Util\HttpClientExtensions.cs" />
+    <Compile Include="Util\INIFile.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="Settings.cs" />
-    <Compile Include="SettingsWindow.xaml.cs">
+    <Compile Include="Util\Settings.cs" />
+    <Compile Include="Window\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UpdaterWindow.xaml.cs">
+    <Compile Include="Window\UpdaterWindow.xaml.cs">
       <DependentUpon>UpdaterWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="WinAPI.cs" />
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="Util\WinAPI.cs" />
+    <Compile Include="Window\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="SettingsWindow.xaml">
+    <Page Include="Window\SettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UpdaterWindow.xaml">
+    <Page Include="Window\UpdaterWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -156,7 +160,6 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="app.config" />
-    <None Include="FFLauncher_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
