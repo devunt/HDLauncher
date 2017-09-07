@@ -36,9 +36,7 @@ namespace HDLauncher
 
         public const string LAUNCHER_BASE_URL = "https://launcher.ff14.co.kr";
 
-        public const string LAUNCHER_USER_AGENT =
-                "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.2; WOW64; Trident/7.0; .NET4.0C; .NET4.0E; .NET CLR 2.0.50727; .NET CLR 3.0.30729; .NET CLR 3.5.30729)"
-            ;
+        public const string LAUNCHER_USER_AGENT = "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.2; WOW64; Trident/7.0; .NET4.0C; .NET4.0E; .NET CLR 2.0.50727; .NET CLR 3.0.30729; .NET CLR 3.5.30729)";
 
         public const string LOGIN_URL = "/LauncherFF/LauncherProcess";
         public const string OTP_AUTH_URL = "/LauncherFF/OTPCheck";
@@ -86,14 +84,6 @@ namespace HDLauncher
 
         public static readonly Regex RE_RECAPTCHA_CKEY = new Regex("challenge : '(.+?)',");
         public static readonly Regex RE_RECAPTCHA_RELOAD_CKEY = new Regex("reload\\('(.+?)',");
-
-        public static readonly Regex RE_JSON_RESULT = new Regex("\"result\":\"(.+?)\"");
-        public static readonly Regex RE_JSON_LOGIN_RESULT = new Regex("\"loginResult\":\"(.+?)\"");
-        public static readonly Regex RE_JSON_MEMBER_KEY = new Regex("\"memberKey\":\"(.+?)\"");
-        public static readonly Regex RE_JSON_MOTP_USE = new Regex("\"motpUse\":\"O\"");
-        public static readonly Regex RE_JSON_MOTP_ID = new Regex("\"motpID\":\"(.+?)\"");
-        public static readonly Regex RE_JSON_TOKEN = new Regex("\"toKen\":\"(.+?)\"");
-        public static readonly Regex RE_JSON_OTP_RESULT = new Regex("\"Result\":\"(.+?)\"");
 
         #endregion
     }
