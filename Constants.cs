@@ -5,6 +5,7 @@ namespace HDLauncher
     internal static class Constants
     {
         public const decimal VERSION = 0.2m;
+        public const string APPNAME = "HDLauncher";
 
         #region Settings
 
@@ -23,12 +24,8 @@ namespace HDLauncher
 
         #region Updater
 
-        public const string UPDATE_BASE_URL = "http://hdlauncher.devunt.kr";
-        public const string UPDATE_VERCHECK_URL = "/version.txt";
-        public const string UPDATE_FILE_DIR = "/files/";
-        public const string UPDATE_FILE_EXT = ".exe";
-
-        public const string UPDATE_TEMP_FILENAME = @".\.HDLauncher.exe";
+        public const string GITHUB_REPO = "devunt/HDLauncher";
+        public const string UPDATE_TEMP_DIRPATH = @"Updates\";
 
         #endregion
 

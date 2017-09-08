@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -11,45 +13,94 @@ namespace HDLauncher
     {
         public static async Task Update()
         {
+
+            var updaterWindow = new UpdaterWindow();
+
             try
             {
-                File.Delete(Constants.UPDATE_TEMP_FILENAME);
+                var tempdir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), Constants.APPNAME, Constants.UPDATE_TEMP_DIRPATH);
+                var batchpath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), Constants.APPNAME, "update.bat");
 
-                using (var client = new HttpClient { BaseAddress = new Uri(Constants.UPDATE_BASE_URL) })
+                if (Directory.Exists(tempdir))
                 {
-                    var response = await client.GetAsync(Constants.UPDATE_VERCHECK_URL);
-                    var versionResp = await response.Content.ReadAsStringAsync();
-                    var version = decimal.Parse(versionResp);
+                    Directory.Delete(tempdir, true);
+                }
+                Directory.CreateDirectory(tempdir);
+
+                using (var client = new HttpClient())
+                {
+                    client.DefaultRequestHeaders
+                        .TryAddWithoutValidation("User-Agent", Constants.LAUNCHER_USER_AGENT);
+
+                    var json = await client.GetJson($"https://api.github.com/repos/{Constants.GITHUB_REPO}/releases/latest");
+                    decimal version = Convert.ToDecimal(json.tag_name.ToObject<string>().Substring(1));
 
                     if (version <= Constants.VERSION)
                         return;
 
-                    var updaterWindow = new UpdaterWindow();
                     updaterWindow.Show();
 
-                    var path = Process.GetCurrentProcess().MainModule.FileName;
+                    string url = null;
+                    foreach (var asset in json.assets)
+                    {
+                        if (asset.name == string.Format("HDLauncher.v{0}.zip", version))
+                        {
+                            url = asset.browser_download_url;
+                            break;
+                        }
+                    }
 
-                    File.Move(path, Constants.UPDATE_TEMP_FILENAME);
+                    var exepath = Process.GetCurrentProcess().MainModule.FileName;
 
-                    response = await client.GetAsync(Constants.UPDATE_FILE_DIR + version + Constants.UPDATE_FILE_EXT);
-
+                    var response = await client.GetAsync(url);
                     response.EnsureSuccessStatusCode();
 
                     var stream = await response.Content.ReadAsStreamAsync();
-
-                    using (var fstream = File.Open(path, FileMode.Create))
+                    using (var zip = ZipStorer.Open(stream, FileAccess.Read))
                     {
-                        stream.CopyTo(fstream);
+                        var dir = zip.ReadCentralDir();
+                        foreach (var entry in dir)
+                        {
+                            var filename = entry.FilenameInZip;
+                            if (filename == "HDLauncher.exe")
+                            {
+                                filename = Path.GetFileName(exepath);
+                            }
+
+                            zip.ExtractFile(entry, Path.Combine(tempdir, filename));
+                        }
                     }
 
-                    updaterWindow.Close();
+                    var currentdir = Path.GetDirectoryName(exepath);
 
-                    Process.Start(new ProcessStartInfo(path));
+                    File.WriteAllText(batchpath,
+                        "@echo off\r\n" +
+                        "title HDLauncher Updater\r\n" +
+                        "echo Updating HDLauncher...\r\n" +
+                        "ping 127.0.0.1 -n 3 > nul\r\n" +
+                        $"move /y \"{tempdir}\\*\" \"{currentdir}\" > nul\r\n" +
+                        $"\"{exepath}\"\r\n" +
+                        "echo Running HDLauncher...\r\n",
+                    Encoding.Default);
+
+                    var si = new ProcessStartInfo();
+                    si.FileName = batchpath;
+                    si.CreateNoWindow = true;
+                    si.UseShellExecute = false;
+                    si.WindowStyle = ProcessWindowStyle.Hidden;
+
+                    Process.Start(si);
+
                     Application.Current.Shutdown();
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                MessageBox.Show("업데이트 도중 문제 발생!\n\n" + ex.ToString(), "에러!", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                updaterWindow.Close();
             }
         }
     }

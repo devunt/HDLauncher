@@ -122,6 +122,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Util\OTPTokenGenerator.cs" />
     <Compile Include="Util\Settings.cs" />
+    <Compile Include="Util\ZipStorer.cs" />
     <Compile Include="Window\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
