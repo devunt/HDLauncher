@@ -21,6 +21,9 @@ namespace HDLauncher
         public static bool SavePassword { get; set; }
         public static bool RunAsAdministrator { get; set; }
 
+        public static string UOtpId { get; set; }
+        public static string UOtpSeed { get; set; }
+
         public static string Password
         {
             get
@@ -73,6 +76,8 @@ namespace HDLauncher
                 GraphicApi = iniFile.ReadValue("preferences", "graphicapi") == "9" ? GraphicApis.DX_9 : GraphicApis.DX_11;
                 SavePassword = iniFile.ReadValue("preferences", "savepassword") == "1";
                 RunAsAdministrator = iniFile.ReadValue("preferences", "runasadministrator") == "1";
+                UOtpId = iniFile.ReadValue("uotp", "oid");
+                UOtpSeed = iniFile.ReadValue("uotp", "seed");
             }
         }
 
@@ -84,6 +89,8 @@ namespace HDLauncher
             iniFile.WriteValue("preferences", "graphicapi", GraphicApi == GraphicApis.DX_9 ? "9" : "11");
             iniFile.WriteValue("preferences", "savepassword", SavePassword ? "1" : "0");
             iniFile.WriteValue("preferences", "runasadministrator", RunAsAdministrator ? "1" : "0");
+            iniFile.WriteValue("uotp", "oid", UOtpId);
+            iniFile.WriteValue("uotp", "seed", UOtpSeed);
         }
     }
 }

@@ -31,6 +31,7 @@
                              Controls:TextBoxHelper.ClearTextButton="True" Margin="0,0,0,5" />
 
                 <TextBox x:Name="OTP" TabIndex="2" Controls:TextBoxHelper.Watermark="OTP (미사용시 생략)"
+                         ToolTip="μOTP+ 를 사용할 시 생략하면 자동으로 생성합니다."
                          Controls:TextBoxHelper.ClearTextButton="True" Margin="0,0,0,5" />
 
                 <Border BorderThickness="1" BorderBrush="LightGray" Height="50" Margin="0,0,0,5">

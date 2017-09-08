@@ -120,6 +120,7 @@
     <Compile Include="Util\HttpClientExtensions.cs" />
     <Compile Include="Util\INIFile.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="Util\OTPTokenGenerator.cs" />
     <Compile Include="Util\Settings.cs" />
     <Compile Include="Window\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>

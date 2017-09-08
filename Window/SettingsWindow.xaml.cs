@@ -19,6 +19,8 @@ namespace HDLauncher
             Version.Text = "v" + Constants.VERSION;
             InstallPath.Text = Settings.FFXIVPath;
             RunAsAdministrator.IsChecked = Settings.RunAsAdministrator;
+            UOtpId.Text = Settings.UOtpId;
+            UOtpSeed.Text = Settings.UOtpSeed;
         }
 
         private void InstallPathBtn_Click(object sender, RoutedEventArgs e)
@@ -34,8 +36,10 @@ namespace HDLauncher
 
         private void MetroWindow_Closing(object sender, CancelEventArgs e)
         {
-            Settings.FFXIVPath = InstallPath.Text;
+            Settings.FFXIVPath = InstallPath.Text.Trim();
             Settings.RunAsAdministrator = RunAsAdministrator.IsChecked == true;
+            Settings.UOtpId = UOtpId.Text.Trim();
+            Settings.UOtpSeed = UOtpSeed.Text.Trim();
             Settings.Save();
         }
     }

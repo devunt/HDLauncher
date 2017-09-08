@@ -202,11 +202,19 @@ namespace HDLauncher
                     {
                         ShowInformation("OTP 확인중...");
 
+                        var token = OTP.Text.Trim();
+                        if (string.IsNullOrEmpty(token) && !string.IsNullOrEmpty(Settings.UOtpId) && !string.IsNullOrEmpty(Settings.UOtpSeed))
+                        {
+                            var oid = int.Parse(Settings.UOtpId);
+                            var seed = Convert.FromBase64String(Settings.UOtpSeed);
+                            token = OTPTokenGenerator.GenerateToken(oid, seed);
+                        }
+
                         values = new Dictionary<string, string>
                         {
                             { "csiteNo", Constants.CSITE_NO },
                             { "motpID", loginJson.motpID.ToString() },
-                            { "otpNum", OTP.Text.Trim() },
+                            { "otpNum", token },
                             { "memberID", Username.Text.Trim() },
                             { "memberKey", loginJson.memberKey.ToString() }
                         };
