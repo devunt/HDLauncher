@@ -80,7 +80,7 @@ namespace HDLauncher
                         }
                     }
                 }
-                catch (Exception ex)
+                catch
                 {
                     return string.Empty;
                 }

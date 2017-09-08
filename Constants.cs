@@ -4,12 +4,12 @@ namespace HDLauncher
 {
     internal static class Constants
     {
-        public const decimal VERSION = 0.2m;
+        public const decimal VERSION = 0.3m;
         public const string APPNAME = "HDLauncher";
 
         #region Settings
 
-        public const string SETTINGS_FILENAME = @".\HDLauncher.cfg";
+        public const string SETTINGS_FILEPATH = @"HDLauncher.cfg";
         public const string PASSWORD_CRYPT_KEY = "2Y*}F972ue6r7J99.%cg";
 
         public const string REG_PATH_VALNAME = "InstallLocation";

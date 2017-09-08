@@ -62,8 +62,10 @@ namespace HDLauncher
 
         public static void Load()
         {
-            iniFile = new INIFile(Constants.SETTINGS_FILENAME);
-            if (!File.Exists(Constants.SETTINGS_FILENAME))
+            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), Constants.APPNAME, Constants.SETTINGS_FILEPATH);
+
+            iniFile = new INIFile(path);
+            if (!File.Exists(path))
             {
                 Init();
                 Save();
