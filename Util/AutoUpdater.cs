@@ -43,12 +43,14 @@ namespace HDLauncher
                     string url = null;
                     foreach (var asset in json.assets)
                     {
-                        if (asset.name == string.Format("HDLauncher.v{0}.zip", version))
+                        if (asset.name == $"HDLauncher.v{version}.zip")
                         {
                             url = asset.browser_download_url;
                             break;
                         }
                     }
+
+                    Sentry.Report("Update started");
 
                     var exepath = Process.GetCurrentProcess().MainModule.FileName;
 
@@ -96,7 +98,8 @@ namespace HDLauncher
             }
             catch (Exception ex)
             {
-                MessageBox.Show("업데이트 도중 문제 발생!\n\n" + ex.ToString(), "에러!", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("업데이트 도중 문제 발생!\n\n" + ex, "에러!", MessageBoxButton.OK, MessageBoxImage.Error);
+                Sentry.ReportAsync(ex, new { Action = "On Update" });
             }
             finally
             {

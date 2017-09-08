@@ -7,6 +7,8 @@ namespace HDLauncher
         public const decimal VERSION = 0.3m;
         public const string APPNAME = "HDLauncher";
 
+        public const string RAVEN_DSN = "http://891bfd02549143beb6440056786e3ce9:0d84f2575cd341c69aa68a6c342eec2b@s.devunt.kr/6";
+
         #region Settings
 
         public const string SETTINGS_FILEPATH = @"HDLauncher.cfg";

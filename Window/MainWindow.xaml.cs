@@ -64,6 +64,8 @@ namespace HDLauncher
 
             EventManager.RegisterClassHandler(typeof(TextBox), KeyUpEvent, new KeyEventHandler(TextBox_KeyUp));
             EventManager.RegisterClassHandler(typeof(PasswordBox), KeyUpEvent, new KeyEventHandler(TextBox_KeyUp));
+
+            Sentry.ReportAsync("App started");
         }
 
         private void TextBox_KeyUp(object sender, KeyEventArgs e)
@@ -289,6 +291,7 @@ namespace HDLauncher
                 }
                 else
                 {
+                    Sentry.ReportAsync(ex, new { Action = "On Login" });
                     ShowError("문제가 발생했습니다");
                 }
             }
@@ -342,8 +345,9 @@ namespace HDLauncher
                     ReCaptcha_Image.Source = bitmap;
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                Sentry.ReportAsync(ex, new { Action = "On Loading ReCaptcha" });
                 ShowError("자동입력방지 이미지를 불러오지 못했습니다");
             }
         }

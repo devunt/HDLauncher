@@ -80,6 +80,9 @@
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="SharpRaven, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\SharpRaven.2.2.0\lib\net45\SharpRaven.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -121,6 +124,7 @@
     <Compile Include="Util\INIFile.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Util\OTPTokenGenerator.cs" />
+    <Compile Include="Util\Sentry.cs" />
     <Compile Include="Util\Settings.cs" />
     <Compile Include="Util\ZipStorer.cs" />
     <Compile Include="Window\SettingsWindow.xaml.cs">

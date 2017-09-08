@@ -10,6 +10,11 @@ namespace HDLauncher
         public static void Main()
         {
             AppDomain.CurrentDomain.AssemblyResolve += OnResolveAssembly;
+
+#if !DEBUG
+            Sentry.Initialise();
+#endif
+
             App.Main();
         }
 
@@ -20,7 +25,7 @@ namespace HDLauncher
 
             var path = assemblyName.Name + ".dll";
             if (assemblyName.CultureInfo.Equals(CultureInfo.InvariantCulture) == false)
-                path = string.Format(@"{0}\{1}", assemblyName.CultureInfo, path);
+                path = $@"{assemblyName.CultureInfo}\{path}";
 
             using (var stream = executingAssembly.GetManifestResourceStream(path))
             {
